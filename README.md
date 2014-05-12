@@ -1,2 +1,2 @@
-uconn-dailydigest-widget-wp
+UConn Daily Digest Widget
 ===========================
