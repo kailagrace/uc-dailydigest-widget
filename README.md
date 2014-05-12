@@ -1,0 +1,2 @@
+uconn-dailydigest-widget-wp
+===========================
