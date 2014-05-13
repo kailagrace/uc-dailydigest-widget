@@ -1,5 +1,5 @@
 {
-    "name": "ucoonn/uc-dailydigest-widget",
+    "name": "uconn/uc-dailydigest-widget",
     "description": "Wordpress widget to display the daily digest posts",
     "require": {
         "sabre/xml": "0.0.5"
