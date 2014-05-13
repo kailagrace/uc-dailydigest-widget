@@ -1,0 +1,14 @@
+{
+    "name": "ucoonn/uc-dailydigest-widget",
+    "description": "Wordpress widget to display the daily digest posts",
+    "require": {
+        "sabre/xml": "0.0.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joseph Thibeault",
+            "email": "joseph.thibeault@uconn.edu"
+        }
+    ]
+}
