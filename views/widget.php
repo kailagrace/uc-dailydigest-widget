@@ -3,7 +3,7 @@
 <ul>
     <?php
     $current_category = "";
-    foreach($posts->news as $news_post):
+    foreach($posts as $news_post):
 
         if($news_post->category != $current_category):
             $first = ($current_category == "") ? true : false;
@@ -14,7 +14,11 @@
         endif;
     ?>
 
-    <li><a href="<?php echo $news_post->url; ?>"><?php echo $news_post->title; ?></a></li>
+    <li>
+        <a href="<?php echo $news_post->url; ?>"><?php echo $news_post->title; ?></a><br/>
+        <?php $excerpt = substr(strip_tags($news_post->content), 0, 200); ?>
+        <?php if(strlen($excerpt) > 0) echo $excerpt.'... <a href="'.$news_post->url.'">[Read More]</a>'; ?>
+    </li>
     <?php
     endforeach;
     ?>

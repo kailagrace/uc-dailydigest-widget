@@ -27,12 +27,7 @@
 class UConn_Daily_Digest_Widget extends WP_Widget {
 
     /**
-     * Unique identifier for your widget.
-     *
-     *
-     * The variable name is used as the text domain when internationalizing strings
-     * of text. Its value should match the Text Domain file header in the main
-     * widget file.
+     * Protected constants
      *
      * @since    1.0.0
      *
@@ -40,6 +35,10 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      */
 
     protected $widget_slug = 'uconn-daily-digest-widget';
+
+    protected $xml_transient_name = 'daily_digest_xml';
+    protected $posts_xpath = '/rss/news';
+    protected $expire_hours = 1;
 
 	/*--------------------------------------------------*/
 	/* Constructor
@@ -58,13 +57,12 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-		// TODO: update description
 		parent::__construct(
 			$this->get_widget_slug(),
 			__( 'UConn Daily Digest Widget', $this->get_widget_slug() ),
 			array(
 				'classname'  => $this->get_widget_slug().'-class',
-				'description' => __( 'Short description of the widget goes here.', $this->get_widget_slug() )
+				'description' => __( 'Displays the UConn Daily Digest feed.', $this->get_widget_slug() )
 			)
 		);
 
@@ -110,7 +108,8 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
         return array(
             'feed_title' => $default_title[0],
             'feed_url' => $default_url[0],
-            'num_posts' => 15
+            'num_posts' => 20,
+            'exclude_categories' => 'UConn Today'
         );
     }
 
@@ -137,17 +136,42 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      *
      * @return    SimpleXMLElement of daily digest news posts.
      */
-    public function get_feed_posts($feed_url) {
-        $daily_digest_news_posts_xml = get_transient( 'daily_digest_news_posts_xml' );
+    public function get_feed_posts($feed_url, $exclude = null, $num_posts = 20) {
 
-        if ( false === $daily_digest_news_posts_xml ) {
+        $daily_digest_xml = get_transient( $this->xml_transient_name );
+
+        if ( false === $daily_digest_xml ) {
             $context  = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-            $daily_digest_news_posts_xml = file_get_contents( $feed_url, false, $context);
-            set_transient( 'daily_digest_news_posts_xml', $daily_digest_news_posts_xml, 1 * HOUR_IN_SECONDS );
+            $daily_digest_xml = file_get_contents( $feed_url, false, $context);
+            set_transient( $this->xml_transient_name, $daily_digest_xml, $this->expire_hours * HOUR_IN_SECONDS );
         }
 
-        $daily_digest_news_posts = simplexml_load_string( $daily_digest_news_posts_xml );
-        return $daily_digest_news_posts;
+        $daily_digest = simplexml_load_string( $daily_digest_xml );
+        $daily_digest_news_posts = $daily_digest->xpath($this->posts_xpath);
+
+        if($exclude !== null) {
+            $this->filter_simpleXML_posts( $daily_digest_news_posts, $exclude );
+        }
+
+        return array_slice($daily_digest_news_posts, 0, $num_posts);
+
+    }
+
+    /**
+     * Modifies the array of posts passed in by reference based on the exclusion argument
+     *
+     * @since    1.0.0
+     *
+     * @return    void
+     */
+    private function filter_simpleXML_posts(&$posts, $exclude) {
+
+        $filterArray = explode(',', $exclude);
+
+        $posts = array_filter($posts, function($post) use($filterArray) {
+            return !in_array($post->category, $filterArray);
+        });
+
     }
 
 	/*--------------------------------------------------*/
@@ -174,22 +198,21 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 		if ( isset ( $cache[ $args['widget_id'] ] ) )
 			return print $cache[ $args['widget_id'] ];
 
-		// go on with your widget logic, put everything into a string and …
-
 		extract( $args, EXTR_SKIP );
 
 		$widget_string = $before_widget;
 
         $feed_title = $instance['feed_title'];
         $feed_url = $instance['feed_url'];
+        $num_posts = $instance['num_posts'];
+        $exclude_categories = $instance['exclude_categories'];
 
-        $posts = $this->get_feed_posts($feed_url);
+        $posts = $this->get_feed_posts($feed_url, $exclude_categories, $num_posts);
 
 		ob_start();
 		include( plugin_dir_path( __FILE__ ) . 'views/widget.php' );
 		$widget_string .= ob_get_clean();
 		$widget_string .= $after_widget;
-
 
 		$cache[ $args['widget_id'] ] = $widget_string;
 
@@ -201,8 +224,10 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
 
 	public function flush_widget_cache() {
+        delete_transient( $this->xml_transient_name );
     	wp_cache_delete( $this->get_widget_slug(), 'widget' );
 	}
+
 	/**
 	 * Processes the widget's options to be saved.
 	 *
@@ -218,6 +243,9 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
         $instance['feed_title'] = array_search( $new_instance['feed_url'], $feed_urls );
         $instance['feed_url'] = strip_tags( $new_instance['feed_url'] );
         $instance['num_posts'] = absint( $new_instance['num_posts'] );
+        $instance['exclude_categories'] = strip_tags(trim($new_instance['exclude_categories']));
+
+        $this->flush_widget_cache();
 
 		return $instance;
 
@@ -240,6 +268,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
         $feed_title = $instance['feed_title'];
         $feed_url = $instance['feed_url'];
         $num_posts = $instance['num_posts'];
+        $exclude_categories = $instance['exclude_categories'];
 
 		// Display the admin form
 		include( plugin_dir_path(__FILE__) . 'views/admin.php' );
@@ -291,7 +320,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 	 */
 	public function register_admin_scripts() {
 
-		wp_enqueue_script( $this->get_widget_slug().'-admin-script', plugins_url( 'js/admin.js', __FILE__ ), array('jquery') );
+		//wp_enqueue_script( $this->get_widget_slug().'-admin-script', plugins_url( 'js/admin.js', __FILE__ ), array('jquery') );
 
 	} // end register_admin_scripts
 
@@ -309,7 +338,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 	 */
 	public function register_widget_scripts() {
 
-		wp_enqueue_script( $this->get_widget_slug().'-script', plugins_url( 'js/widget.js', __FILE__ ), array('jquery') );
+		//wp_enqueue_script( $this->get_widget_slug().'-script', plugins_url( 'js/widget.js', __FILE__ ), array('jquery') );
 
 	} // end register_widget_scripts
 
