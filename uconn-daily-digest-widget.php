@@ -223,8 +223,12 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 	} // end widget
 
 
-	public function flush_widget_cache() {
+    public function delete_feed_cache() {
         delete_transient( $this->xml_transient_name );
+    }
+
+	public function flush_widget_cache() {
+        $this->delete_feed_cache();
     	wp_cache_delete( $this->get_widget_slug(), 'widget' );
 	}
 
@@ -294,7 +298,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 	 * @param  boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
 	 */
 	public function activate( $network_wide ) {
-		// TODO define activation functionality here
+		// do nothing
 	} // end activate
 
 	/**
@@ -303,7 +307,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 	 * @param boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog
 	 */
 	public function deactivate( $network_wide ) {
-		// TODO define deactivation functionality here
+		$this->delete_feed_cache();
 	} // end deactivate
 
 	/**
