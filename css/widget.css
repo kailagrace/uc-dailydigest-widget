@@ -1,1 +1,11 @@
-/* This stylesheet is used to style the public view of the widget. */
+.widget li.ucdd-category-title {
+    font-size: 0.8rem;
+    line-height: 1rem;
+    text-transform: uppercase;
+    margin-top: 0.8rem;
+    color: #999;
+}
+
+.widget li.ucdd-category-title.first {
+    margin-top: 0;
+}

@@ -38,6 +38,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      *
      * @var      string
      */
+
     protected $widget_slug = 'uconn-daily-digest-widget';
 
 	/*--------------------------------------------------*/
@@ -103,9 +104,11 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      */
     public function get_widget_defaults() {
         $feed_urls = $this->get_feed_urls();
+        $default_title = array_keys($feed_urls);
         $default_url = array_values($feed_urls);
 
         return array(
+            'feed_title' => $default_title[0],
             'feed_url' => $default_url[0],
             'num_posts' => 15
         );
@@ -125,6 +128,26 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
         );
 
         return $feed_urls;
+    }
+
+    /**
+     * Returns the daily digest news posts.
+     *
+     * @since    1.0.0
+     *
+     * @return    SimpleXMLElement of daily digest news posts.
+     */
+    public function get_feed_posts($feed_url) {
+        $daily_digest_news_posts_xml = get_transient( 'daily_digest_news_posts_xml' );
+
+        if ( false === $daily_digest_news_posts_xml ) {
+            $context  = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
+            $daily_digest_news_posts_xml = file_get_contents( $feed_url, false, $context);
+            set_transient( 'daily_digest_news_posts_xml', $daily_digest_news_posts_xml, 1 * HOUR_IN_SECONDS );
+        }
+
+        $daily_digest_news_posts = simplexml_load_string( $daily_digest_news_posts_xml );
+        return $daily_digest_news_posts;
     }
 
 	/*--------------------------------------------------*/
@@ -157,7 +180,11 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
 		$widget_string = $before_widget;
 
-		// TODO: Here is where you manipulate your widget's values based on their input fields
+        $feed_title = $instance['feed_title'];
+        $feed_url = $instance['feed_url'];
+
+        $posts = $this->get_feed_posts($feed_url);
+
 		ob_start();
 		include( plugin_dir_path( __FILE__ ) . 'views/widget.php' );
 		$widget_string .= ob_get_clean();
@@ -186,7 +213,9 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
 		$instance = $old_instance;
 
-		// TODO: Here is where you update your widget's old values with the new, incoming values
+        $feed_urls = $this->get_feed_urls();
+
+        $instance['feed_title'] = array_search( $new_instance['feed_url'], $feed_urls );
         $instance['feed_url'] = strip_tags( $new_instance['feed_url'] );
         $instance['num_posts'] = absint( $new_instance['num_posts'] );
 
@@ -204,12 +233,11 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
         $defaults = $this->get_widget_defaults();
         $feed_urls = $this->get_feed_urls();
 
-		// TODO: Define default values for your variables
 		$instance = wp_parse_args(
 			(array) $instance, $defaults
 		);
 
-		// TODO: Store the values of the widget in their own variable
+        $feed_title = $instance['feed_title'];
         $feed_url = $instance['feed_url'];
         $num_posts = $instance['num_posts'];
 
@@ -227,7 +255,6 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 	 */
 	public function widget_textdomain() {
 
-		// TODO be sure to change 'uconn-daily-digest-widget' to the name of *your* plugin
 		load_plugin_textdomain( $this->get_widget_slug(), false, plugin_dir_path( __FILE__ ) . 'lang/' );
 
 	} // end widget_textdomain
@@ -288,5 +315,4 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
 } // end class
 
-// TODO: Remember to change 'UConn_Daily_Digest_Widget' to match the class name definition
 add_action( 'widgets_init', create_function( '', 'register_widget("UConn_Daily_Digest_Widget");' ) );
