@@ -15,9 +15,12 @@
     ?>
 
     <li>
-        <a href="<?php echo $news_post->url; ?>"><?php echo $news_post->title; ?></a><br/>
-        <?php $excerpt = substr(strip_tags($news_post->content), 0, 200); ?>
-        <?php if(strlen($excerpt) > 0) echo $excerpt.'... <a href="'.$news_post->url.'">[Read More]</a>'; ?>
+        <a href="<?php echo $news_post->url; ?>"><?php echo strip_tags($news_post->title); ?></a><br/>
+        <?php
+            $excerpt = strip_tags($news_post->content);
+            echo (strlen($excerpt) > 200) ? substr($excerpt, 0, 200) . '... <a href="' . $news_post->url . '">[Read More]</a>' : $excerpt;
+        ?>
+
     </li>
     <?php
     endforeach;
