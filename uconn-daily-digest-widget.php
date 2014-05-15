@@ -18,7 +18,7 @@
  * Author:            Joseph Thibeault
  * Author URI:        http://communications.uconn.edu
  * Text Domain:       uconn-daily-digest-widget
- * License:           GPL-2.0+
+ * License:           MIT+
  * License URI:       http://opensource.org/licenses/MIT
  * Domain Path:       /languages
  * GitHub Plugin URI: https://github.com/uconn/uconn-dailydigest-widget-wp
