@@ -40,46 +40,46 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
     protected $posts_xpath = '/rss/news';
     protected $expire_hours = 1;
 
-	/*--------------------------------------------------*/
-	/* Constructor
-	/*--------------------------------------------------*/
+    /*--------------------------------------------------*/
+    /* Constructor
+    /*--------------------------------------------------*/
 
-	/**
-	 * Specifies the classname and description, instantiates the widget,
-	 * loads localization files, and includes necessary stylesheets and JavaScript.
-	 */
-	public function __construct() {
+    /**
+     * Specifies the classname and description, instantiates the widget,
+     * loads localization files, and includes necessary stylesheets and JavaScript.
+     */
+    public function __construct() {
 
-		// load plugin text domain
-		add_action( 'init', array( $this, 'widget_textdomain' ) );
+        // load plugin text domain
+        add_action( 'init', array( $this, 'widget_textdomain' ) );
 
-		// Hooks fired when the Widget is activated and deactivated
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
+        // Hooks fired when the Widget is activated and deactivated
+        register_activation_hook( __FILE__, array( $this, 'activate' ) );
+        register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
-		parent::__construct(
-			$this->get_widget_slug(),
-			__( 'UConn Daily Digest Widget', $this->get_widget_slug() ),
-			array(
-				'classname'  => $this->get_widget_slug().'-class',
-				'description' => __( 'Displays the UConn Daily Digest feeds in a widget.', $this->get_widget_slug() )
-			)
-		);
+        parent::__construct(
+            $this->get_widget_slug(),
+            __( 'UConn Daily Digest Widget', $this->get_widget_slug() ),
+            array(
+                'classname'  => $this->get_widget_slug().'-class',
+                'description' => __( 'Displays the UConn Daily Digest feeds in a widget.', $this->get_widget_slug() )
+            )
+        );
 
-		// Register admin styles and scripts
-		add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ) );
+        // Register admin styles and scripts
+        add_action( 'admin_print_styles', array( $this, 'register_admin_styles' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_scripts' ) );
 
-		// Register site styles and scripts
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_widget_styles' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'register_widget_scripts' ) );
+        // Register site styles and scripts
+        add_action( 'wp_enqueue_scripts', array( $this, 'register_widget_styles' ) );
+        add_action( 'wp_enqueue_scripts', array( $this, 'register_widget_scripts' ) );
 
-		// Refreshing the widget's cached output with each new post
-		add_action( 'save_post',    array( $this, 'flush_widget_cache' ) );
-		add_action( 'deleted_post', array( $this, 'flush_widget_cache' ) );
-		add_action( 'switch_theme', array( $this, 'flush_widget_cache' ) );
+        // Refreshing the widget's cached output with each new post
+        add_action( 'save_post',    array( $this, 'flush_widget_cache' ) );
+        add_action( 'deleted_post', array( $this, 'flush_widget_cache' ) );
+        add_action( 'switch_theme', array( $this, 'flush_widget_cache' ) );
 
-	} // end constructor
+    } // end constructor
 
 
     /**
@@ -178,33 +178,33 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
     }
 
-	/*--------------------------------------------------*/
-	/* Widget API Functions
-	/*--------------------------------------------------*/
+    /*--------------------------------------------------*/
+    /* Widget API Functions
+    /*--------------------------------------------------*/
 
-	/**
-	 * Outputs the content of the widget.
-	 *
-	 * @param array args  The array of form elements
-	 * @param array instance The current instance of the widget
-	 */
-	public function widget( $args, $instance ) {
+    /**
+     * Outputs the content of the widget.
+     *
+     * @param array args  The array of form elements
+     * @param array instance The current instance of the widget
+     */
+    public function widget( $args, $instance ) {
 
-		// Check if there is a cached output
-		$cache = wp_cache_get( $this->get_widget_slug(), 'widget' );
+        // Check if there is a cached output
+        $cache = wp_cache_get( $this->get_widget_slug(), 'widget' );
 
-		if ( !is_array( $cache ) )
-			$cache = array();
+        if ( !is_array( $cache ) )
+            $cache = array();
 
-		if ( ! isset ( $args['widget_id'] ) )
-			$args['widget_id'] = $this->id;
+        if ( ! isset ( $args['widget_id'] ) )
+            $args['widget_id'] = $this->id;
 
-		if ( isset ( $cache[ $args['widget_id'] ] ) )
-			return print $cache[ $args['widget_id'] ];
+        if ( isset ( $cache[ $args['widget_id'] ] ) )
+            return print $cache[ $args['widget_id'] ];
 
-		extract( $args, EXTR_SKIP );
+        extract( $args, EXTR_SKIP );
 
-		$widget_string = $before_widget;
+        $widget_string = $before_widget;
 
         $feed_title = $instance['feed_title'];
         $feed_url = $instance['feed_url'];
@@ -213,38 +213,38 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
         $posts = $this->get_feed_posts($feed_url, $exclude_categories, $num_posts);
 
-		ob_start();
-		include( plugin_dir_path( __FILE__ ) . 'views/widget.php' );
-		$widget_string .= ob_get_clean();
-		$widget_string .= $after_widget;
+        ob_start();
+        include( plugin_dir_path( __FILE__ ) . 'views/widget.php' );
+        $widget_string .= ob_get_clean();
+        $widget_string .= $after_widget;
 
-		$cache[ $args['widget_id'] ] = $widget_string;
+        $cache[ $args['widget_id'] ] = $widget_string;
 
-		wp_cache_set( $this->get_widget_slug(), $cache, 'widget' );
+        wp_cache_set( $this->get_widget_slug(), $cache, 'widget' );
 
-		print $widget_string;
+        print $widget_string;
 
-	} // end widget
+    } // end widget
 
 
     public function delete_feed_cache() {
         delete_transient( $this->xml_transient_name );
     }
 
-	public function flush_widget_cache() {
+    public function flush_widget_cache() {
         $this->delete_feed_cache();
-    	wp_cache_delete( $this->get_widget_slug(), 'widget' );
-	}
+        wp_cache_delete( $this->get_widget_slug(), 'widget' );
+    }
 
-	/**
-	 * Processes the widget's options to be saved.
-	 *
-	 * @param array new_instance The new instance of values to be generated via the update.
-	 * @param array old_instance The previous instance of values before the update.
-	 */
-	public function update( $new_instance, $old_instance ) {
+    /**
+     * Processes the widget's options to be saved.
+     *
+     * @param array new_instance The new instance of values to be generated via the update.
+     * @param array old_instance The previous instance of values before the update.
+     */
+    public function update( $new_instance, $old_instance ) {
 
-		$instance = $old_instance;
+        $instance = $old_instance;
 
         $feed_urls = $this->get_feed_urls();
 
@@ -255,100 +255,100 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
         $this->flush_widget_cache();
 
-		return $instance;
+        return $instance;
 
-	} // end widget
+    } // end widget
 
-	/**
-	 * Generates the administration form for the widget.
-	 *
-	 * @param array instance The array of keys and values for the widget.
-	 */
-	public function form( $instance ) {
+    /**
+     * Generates the administration form for the widget.
+     *
+     * @param array instance The array of keys and values for the widget.
+     */
+    public function form( $instance ) {
 
         $defaults = $this->get_widget_defaults();
         $feed_urls = $this->get_feed_urls();
 
-		$instance = wp_parse_args(
-			(array) $instance, $defaults
-		);
+        $instance = wp_parse_args(
+            (array) $instance, $defaults
+        );
 
         $feed_title = $instance['feed_title'];
         $feed_url = $instance['feed_url'];
         $num_posts = $instance['num_posts'];
         $exclude_categories = $instance['exclude_categories'];
 
-		// Display the admin form
-		include( plugin_dir_path(__FILE__) . 'views/admin.php' );
+        // Display the admin form
+        include( plugin_dir_path(__FILE__) . 'views/admin.php' );
 
-	} // end form
+    } // end form
 
-	/*--------------------------------------------------*/
-	/* Public Functions
-	/*--------------------------------------------------*/
+    /*--------------------------------------------------*/
+    /* Public Functions
+    /*--------------------------------------------------*/
 
-	/**
-	 * Loads the Widget's text domain for localization and translation.
-	 */
-	public function widget_textdomain() {
+    /**
+     * Loads the Widget's text domain for localization and translation.
+     */
+    public function widget_textdomain() {
 
-		load_plugin_textdomain( $this->get_widget_slug(), false, plugin_dir_path( __FILE__ ) . 'lang/' );
+        load_plugin_textdomain( $this->get_widget_slug(), false, plugin_dir_path( __FILE__ ) . 'lang/' );
 
-	} // end widget_textdomain
+    } // end widget_textdomain
 
-	/**
-	 * Fired when the plugin is activated.
-	 *
-	 * @param  boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
-	 */
-	public function activate( $network_wide ) {
-		// do nothing
-	} // end activate
+    /**
+     * Fired when the plugin is activated.
+     *
+     * @param  boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog.
+     */
+    public function activate( $network_wide ) {
+        // do nothing
+    } // end activate
 
-	/**
-	 * Fired when the plugin is deactivated.
-	 *
-	 * @param boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog
-	 */
-	public function deactivate( $network_wide ) {
-		$this->delete_feed_cache();
-	} // end deactivate
+    /**
+     * Fired when the plugin is deactivated.
+     *
+     * @param boolean $network_wide True if WPMU superadmin uses "Network Activate" action, false if WPMU is disabled or plugin is activated on an individual blog
+     */
+    public function deactivate( $network_wide ) {
+        $this->delete_feed_cache();
+    } // end deactivate
 
-	/**
-	 * Registers and enqueues admin-specific styles.
-	 */
-	public function register_admin_styles() {
+    /**
+     * Registers and enqueues admin-specific styles.
+     */
+    public function register_admin_styles() {
 
-		wp_enqueue_style( $this->get_widget_slug().'-admin-styles', plugins_url( 'css/admin.css', __FILE__ ) );
+        wp_enqueue_style( $this->get_widget_slug().'-admin-styles', plugins_url( 'css/admin.css', __FILE__ ) );
 
-	} // end register_admin_styles
+    } // end register_admin_styles
 
-	/**
-	 * Registers and enqueues admin-specific JavaScript.
-	 */
-	public function register_admin_scripts() {
+    /**
+     * Registers and enqueues admin-specific JavaScript.
+     */
+    public function register_admin_scripts() {
 
-		//wp_enqueue_script( $this->get_widget_slug().'-admin-script', plugins_url( 'js/admin.js', __FILE__ ), array('jquery') );
+        //wp_enqueue_script( $this->get_widget_slug().'-admin-script', plugins_url( 'js/admin.js', __FILE__ ), array('jquery') );
 
-	} // end register_admin_scripts
+    } // end register_admin_scripts
 
-	/**
-	 * Registers and enqueues widget-specific styles.
-	 */
-	public function register_widget_styles() {
+    /**
+     * Registers and enqueues widget-specific styles.
+     */
+    public function register_widget_styles() {
 
-		wp_enqueue_style( $this->get_widget_slug().'-widget-styles', plugins_url( 'css/widget.css', __FILE__ ) );
+        wp_enqueue_style( $this->get_widget_slug().'-widget-styles', plugins_url( 'css/widget.css', __FILE__ ) );
 
-	} // end register_widget_styles
+    } // end register_widget_styles
 
-	/**
-	 * Registers and enqueues widget-specific scripts.
-	 */
-	public function register_widget_scripts() {
+    /**
+     * Registers and enqueues widget-specific scripts.
+     */
+    public function register_widget_scripts() {
 
-		//wp_enqueue_script( $this->get_widget_slug().'-script', plugins_url( 'js/widget.js', __FILE__ ), array('jquery') );
+        //wp_enqueue_script( $this->get_widget_slug().'-script', plugins_url( 'js/widget.js', __FILE__ ), array('jquery') );
 
-	} // end register_widget_scripts
+    } // end register_widget_scripts
 
 } // end class
 
