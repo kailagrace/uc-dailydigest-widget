@@ -2,8 +2,6 @@
 /**
  * UConn Daily Digest Widget
  *
- * The WordPress Widget Boilerplate is an organized, maintainable boilerplate for building widgets using WordPress best practices.
- *
  * @package   UConn_Daily_Digest_Widget
  * @author    Joseph Thibeault <joseph.thibeault@uconn.edu>
  * @license   MIT
