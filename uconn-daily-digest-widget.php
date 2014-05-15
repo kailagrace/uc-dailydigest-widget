@@ -11,7 +11,7 @@
  * @wordpress-plugin
  * Plugin Name:       UConn Daily Digest Widget
  * Plugin URI:        @TODO
- * Description:       Displays the UConn Daily Digest
+ * Description:       Displays the UConn Daily Digest feeds in a widget
  * Version:           1.0.0
  * Author:            Joseph Thibeault
  * Author URI:        http://communications.uconn.edu
