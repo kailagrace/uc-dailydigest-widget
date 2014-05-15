@@ -62,7 +62,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 			__( 'UConn Daily Digest Widget', $this->get_widget_slug() ),
 			array(
 				'classname'  => $this->get_widget_slug().'-class',
-				'description' => __( 'Displays the UConn Daily Digest feed.', $this->get_widget_slug() )
+				'description' => __( 'Displays the UConn Daily Digest feeds in a widget.', $this->get_widget_slug() )
 			)
 		);
 
@@ -109,7 +109,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
             'feed_title' => $default_title[0],
             'feed_url' => $default_url[0],
             'num_posts' => 20,
-            'exclude_categories' => 'UConn Today'
+            'exclude_categories' => ''
         );
     }
 
@@ -166,10 +166,14 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      */
     private function filter_simpleXML_posts(&$posts, $exclude) {
 
-        $filterArray = explode(',', $exclude);
+        // clean up user input
+        $filterArray = explode(';', strtolower($exclude));
+        $filterArray = array_map('trim', $filterArray);
 
+        // filter the array
         $posts = array_filter($posts, function($post) use($filterArray) {
-            return !in_array($post->category, $filterArray);
+            $post_category = strtolower($post->category);
+            return !in_array($post_category, $filterArray);
         });
 
     }

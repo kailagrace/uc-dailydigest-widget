@@ -18,7 +18,9 @@
         <a href="<?php echo $news_post->url; ?>"><?php echo strip_tags($news_post->title); ?></a><br/>
         <?php
             $excerpt = strip_tags($news_post->content);
-            echo (strlen($excerpt) > 200) ? substr($excerpt, 0, 200) . '... <a href="' . $news_post->url . '">[Read More]</a>' : $excerpt;
+            $excerpt_length = strlen($excerpt);
+            $last_word = ($excerpt_length > 200) ? strpos($excerpt, ' ', 150) : 0;
+            echo ($excerpt_length > 200) ? substr($excerpt, 0, $last_word) . '... <a href="' . $news_post->url . '">[Read More]</a>' : $excerpt;
         ?>
 
     </li>
