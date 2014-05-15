@@ -19,7 +19,7 @@
  * License:           MIT+
  * License URI:       http://opensource.org/licenses/MIT
  * Domain Path:       /languages
- * GitHub Plugin URI: https://github.com/uconn/uconn-dailydigest-widget-wp
+ * GitHub Plugin URI: https://github.com/uconn/uc-dailydigest-widget/
  */
 
 class UConn_Daily_Digest_Widget extends WP_Widget {
