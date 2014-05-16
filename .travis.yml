@@ -41,7 +41,7 @@ before_script:
     - cp wp-tests-config-sample.php wp-tests-config.php
     - sed -i "s/wordpress_tests/wordpress_tests/" wp-tests-config.php
     - sed -i "s/root/travis/" wp-tests-config.php
-    - sed -i "s///" wp-tests-config.php
+    #- sed -i "s///" wp-tests-config.php
     - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 
 script: phpunit
