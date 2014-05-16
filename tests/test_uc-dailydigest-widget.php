@@ -28,9 +28,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_admin_styles_enqueued() {
         global $uc_dailydigest_widget;
-        var_dump(wp_style_is(
-            'register_admin_styles'
-        , 'enqueued' ));
+        var_dump($GLOBALS['wp_scripts']);
         $this->assertTrue( wp_style_is(
             'register_admin_styles'
         , 'enqueued' ) );
