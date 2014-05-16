@@ -27,18 +27,20 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertGreaterThan( 0, has_filter( 'init', array( $uc_dailydigest_widget, 'widget_textdomain') ) );
     }
 
-    function test_admin_styles_enqueued() {
-        global $uc_dailydigest_widget;
-        $this->assertTrue( wp_style_is(
-            $this->widget_slug.'-admin-styles'
-        , 'enqueued' ) );
-    }
-
     function test_widget_styles_enqueued() {
         global $uc_dailydigest_widget;
-        $this->assertTrue( wp_style_is(
-            $this->widget_slug.'-widget-styles'
-        , 'enqueued' ) );
+        $this->assertTrue( has_action(
+            'wp_enqueue_scripts',
+            array($uc_dailydigest_widget, 'register_widget_styles')
+        ) );
+    }
+
+    function test_admin_styles_enqueued() {
+        global $uc_dailydigest_widget;
+        $this->assertTrue( has_action(
+            'admin_enqueue_scripts',
+            array($uc_dailydigest_widget, 'register_admin_styles')
+        ) );
     }
 
     function test_get_widget_slug() {
