@@ -159,6 +159,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      * Modifies the array of posts passed in by reference based on the exclusion argument
      *
      * @since    1.0.0
+     * @requires PHP 5.3
      *
      * @return    void
      */
