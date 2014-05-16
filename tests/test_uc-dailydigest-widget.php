@@ -1,8 +1,8 @@
 <?php
 class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     protected $widget_slug = 'uconn-daily-digest-widget';
-    private $defaults
-    private $posts
+    private $defaults;
+    private $posts;
     private $testfeed;
 
     function setUp() {
