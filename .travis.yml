@@ -14,11 +14,11 @@ php:
 matrix:
   include:
     env:
-    - WP_VERSION=master
-    - WP_VERSION=3.9.1
-    - WP_VERSION=3.8.1
-    - WP_MULTISITE=0
-    - WP_MULTISITE=1
+      - WP_VERSION=master
+      - WP_VERSION=3.9.1
+      - WP_VERSION=3.8.1
+      - WP_MULTISITE=0
+      - WP_MULTISITE=1
 
 # Clones WordPress and configures our testing environment.
 before_script:
