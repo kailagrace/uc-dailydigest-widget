@@ -1,6 +1,7 @@
 <?php
 class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     protected $widget_slug = 'uconn-daily-digest-widget';
+    private $defaults, $posts;
 
     function setUp() {
         global $uc_dailydigest_widget;
@@ -49,6 +50,32 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
             'admin_print_styles',
             array($uc_dailydigest_widget, 'register_admin_styles')
         ) );
+    }
+
+    function test_get_feed_urls() {
+        global $uc_dailydigest_widget;
+        $feed_urls = $uc_dailydigest_widget->get_feed_urls();
+        $this->assertInternalType( 'array', $feed_urls );
+        $this->assertArrayHasKey( 'Student Daily Digest', $feed_urls );
+        $this->assertArrayHasKey( 'Faculty/Staff Daily Digest', $feed_urls );
+    }
+
+    function test_get_widget_defaults() {
+        global $uc_dailydigest_widget;
+        $this->defaults = $uc_dailydigest_widget->get_widget_defaults();
+        $this->assertInternalType( 'array', $this->defaults );
+        $this->assertGreaterThan( 0, sizeof($this->defaults) );
+        $this->assertArrayHasKey( 'feed_title', $this->defaults );
+        $this->assertArrayHasKey( 'feed_url', $this->defaults );
+        $this->assertArrayHasKey( 'num_posts', $this->defaults );
+        $this->assertArrayHasKey( 'exclude_categories', $this->defaults );
+    }
+
+    function test_get_feed_posts() {
+        global $uc_dailydigest_widget;
+        $posts = $uc_dailydigest_widget->get_feed_posts($defaults['feed_url']);
+        $this->assertInternalType( 'array', $posts );
+        $this->assertGreaterThan( 0, sizeof($posts) );
     }
 }
 ?>
