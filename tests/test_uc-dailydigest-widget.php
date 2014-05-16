@@ -1,5 +1,6 @@
 <?php
 class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
+    protected $widget_slug = 'uconn-daily-digest-widget';
 
     function setUp() {
         global $uc_dailydigest_widget;
@@ -28,16 +29,15 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_admin_styles_enqueued() {
         global $uc_dailydigest_widget;
-        var_dump($GLOBALS['wp_scripts']);
         $this->assertTrue( wp_style_is(
-            'register_admin_styles'
+            $this->widget_slug.'-admin-styles'
         , 'enqueued' ) );
     }
 
     function test_widget_styles_enqueued() {
         global $uc_dailydigest_widget;
         $this->assertTrue( wp_style_is(
-            'register_widget_styles'
+            $this->widget_slug.'-widget-styles'
         , 'enqueued' ) );
     }
 
