@@ -24,12 +24,20 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_init_hook_was_added() {
         global $uc_dailydigest_widget;
-        $this->assertGreaterThan( 0, has_filter( 'init', array( $uc_dailydigest_widget, 'widget_textdomain') ) );
+        $this->assertGreaterThan( 0, has_filter(
+            'init',
+            array( $uc_dailydigest_widget, 'widget_textdomain')
+        ) );
+    }
+
+    function test_get_widget_slug() {
+        global $uc_dailydigest_widget;
+        $this->assertEquals( 'uconn-daily-digest-widget', $uc_dailydigest_widget->get_widget_slug() );
     }
 
     function test_widget_styles_enqueued() {
         global $uc_dailydigest_widget;
-        $this->assertTrue( has_action(
+        $this->assertGreaterThan( has_action(
             'wp_enqueue_scripts',
             array($uc_dailydigest_widget, 'register_widget_styles')
         ) );
@@ -37,15 +45,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_admin_styles_enqueued() {
         global $uc_dailydigest_widget;
-        $this->assertTrue( has_action(
-            'admin_enqueue_scripts',
+        $this->assertGreaterThan( has_action(
+            'admin_print_styles',
             array($uc_dailydigest_widget, 'register_admin_styles')
         ) );
-    }
-
-    function test_get_widget_slug() {
-        global $uc_dailydigest_widget;
-        $this->assertEquals( 'uconn-daily-digest-widget', $uc_dailydigest_widget->get_widget_slug() );
     }
 }
 ?>
