@@ -37,7 +37,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_widget_styles_enqueued() {
         global $uc_dailydigest_widget;
-        $this->assertGreaterThan( has_action(
+        $this->assertGreaterThan( 0, has_action(
             'wp_enqueue_scripts',
             array($uc_dailydigest_widget, 'register_widget_styles')
         ) );
@@ -45,7 +45,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_admin_styles_enqueued() {
         global $uc_dailydigest_widget;
-        $this->assertGreaterThan( has_action(
+        $this->assertGreaterThan( 0, has_action(
             'admin_print_styles',
             array($uc_dailydigest_widget, 'register_admin_styles')
         ) );
