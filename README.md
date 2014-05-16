@@ -1,6 +1,8 @@
 UConn Daily Digest Widget
 ===========================
 
+[![Build Status](https://travis-ci.org/uconn/uc-dailydigest-widget.svg?branch=master)](https://travis-ci.org/uconn/uc-dailydigest-widget)
+
 ### Installation
 
 1. Upload `uc-dailydigest-widget` to the `/wp-content/plugins/` directory
