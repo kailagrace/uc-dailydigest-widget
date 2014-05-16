@@ -4,13 +4,16 @@
 language: php
 
 # PHP version used in first build configuration.
+php:
+  - "5.5"
+  - "5.4"
+  - "5.3"
+
 # WordPress version used in first build configuration.
+
 matrix:
-  php:
-    - "5.5"
-    - "5.4"
-    - "5.3"
-  env:
+  include:
+    env:
     - WP_VERSION=master
     - WP_VERSION=3.9.1
     - WP_VERSION=3.8.1
