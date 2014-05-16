@@ -1,7 +1,9 @@
 <?php
 class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     protected $widget_slug = 'uconn-daily-digest-widget';
-    private $defaults, $posts;
+    private $defaults
+    private $posts
+    private $testfeed;
 
     function setUp() {
         global $uc_dailydigest_widget;
@@ -9,6 +11,8 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         parent::setUp();
 
         include_once( plugin_dir_path( dirname( __FILE__ ) ) . '/uconn-daily-digest-widget.php' );
+
+        $this->testfeed = plugin_dir_path( dirname( __FILE__ ) ) . '/tests/testfeed.xml' );
 
         // Allow for a plugin to insert a different class to handle requests.
         $uc_dailydigest_widget_class = apply_filters('uc_dailydigest_widget_class', 'UConn_Daily_Digest_Widget');
@@ -73,7 +77,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_get_feed_posts() {
         global $uc_dailydigest_widget;
-        $this->posts = $uc_dailydigest_widget->get_feed_posts($this->defaults['feed_url']);
+        $this->posts = $uc_dailydigest_widget->get_feed_posts($this->testfeed);
         $this->assertInternalType( 'array', $this->posts );
         $this->assertGreaterThan( 0, sizeof($this->posts) );
     }
