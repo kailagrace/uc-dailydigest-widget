@@ -73,9 +73,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     function test_get_feed_posts() {
         global $uc_dailydigest_widget;
-        $posts = $uc_dailydigest_widget->get_feed_posts($defaults['feed_url']);
-        $this->assertInternalType( 'array', $posts );
-        $this->assertGreaterThan( 0, sizeof($posts) );
+        $this->posts = $uc_dailydigest_widget->get_feed_posts($this->defaults['feed_url']);
+        $this->assertInternalType( 'array', $this->posts );
+        $this->assertGreaterThan( 0, sizeof($this->posts) );
     }
 }
 ?>
