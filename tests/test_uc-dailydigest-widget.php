@@ -102,8 +102,8 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $posts = $uc_dailydigest_widget->get_feed_posts($this->test_feed);
         $daily_digest_xml = get_transient( $this->xml_transient_name );
         $this->assertTrue( $daily_digest_xml );
-        $this->assertInternalType( 'array', $daily_digest_xml );
-        $this->assertGreaterThan( 0, sizeof($daily_digest_xml) );
+        $this->assertInternalType( 'string', $daily_digest_xml );
+        $this->assertGreaterThan( 0, strlen($daily_digest_xml) );
     }
 
     function test_feed_delete_transient() {
@@ -172,7 +172,8 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $posts = $uc_dailydigest_widget->get_feed_posts($this->test_feed);
         $daily_digest_xml = get_transient( $this->xml_transient_name );
-        $this->assertTrue( $daily_digest_xml );
+        $this->assertInternalType( 'string', $daily_digest_xml );
+        $this->assertGreaterThan( 0, strlen($daily_digest_xml) );
 
         $uc_dailydigest_widget->deactivate();
         $daily_digest_xml = get_transient( $this->xml_transient_name );
