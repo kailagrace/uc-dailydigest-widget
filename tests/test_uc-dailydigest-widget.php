@@ -17,8 +17,8 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $this->test_feed = plugin_dir_path( dirname( __FILE__ ) ) . 'tests/test_feed.xml';
         $this->test_xml = file_get_contents( $this->test_feed );
-        $this->simpleXML_test_feed = simplexml_load_string($this->test_xml);
-        $this->simpleXML_test_feed = $daily_digest->xpath($this->posts_xpath);
+        $daily_digest_feed = simplexml_load_string($this->test_xml);
+        $this->simpleXML_test_feed = $daily_digest_feed->xpath($this->posts_xpath);
 
         $uc_dailydigest_widget_class = apply_filters('uc_dailydigest_widget_class', 'UConn_Daily_Digest_Widget');
         $uc_dailydigest_widget = new $uc_dailydigest_widget_class;
@@ -129,6 +129,8 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $this->assertGreaterThan($post_filter_length, $pre_filter_length);
     }
+
+    // TODO: test simpleXML_posts filtering
 
     function test_get_feed_posts_filter() {
         global $uc_dailydigest_widget;
