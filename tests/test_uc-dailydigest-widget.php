@@ -2,6 +2,7 @@
 class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     protected $widget_slug = 'uconn-daily-digest-widget';
     protected $xml_transient_name = 'daily_digest_xml';
+    protected $posts_xpath = '/rss/news';
 
     private $defaults;
     private $test_feed;
@@ -17,6 +18,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->test_feed = plugin_dir_path( dirname( __FILE__ ) ) . 'tests/test_feed.xml';
         $this->test_xml = file_get_contents( $this->test_feed );
         $this->simpleXML_test_feed = simplexml_load_string($this->test_xml);
+        $this->simpleXML_test_feed = $daily_digest->xpath($this->posts_xpath);
 
         $uc_dailydigest_widget_class = apply_filters('uc_dailydigest_widget_class', 'UConn_Daily_Digest_Widget');
         $uc_dailydigest_widget = new $uc_dailydigest_widget_class;
