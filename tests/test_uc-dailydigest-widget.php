@@ -15,7 +15,8 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         include_once( plugin_dir_path( dirname( __FILE__ ) ) . '/uconn-daily-digest-widget.php' );
 
         $this->test_feed = plugin_dir_path( dirname( __FILE__ ) ) . 'tests/test_feed.xml';
-        $this->simpleXML_test_feed = simplexml_load_string($this->test_feed);
+        $this->test_xml = file_get_contents( $this->test_feed );
+        $this->simpleXML_test_feed = simplexml_load_string($this->test_xml);
 
         $uc_dailydigest_widget_class = apply_filters('uc_dailydigest_widget_class', 'UConn_Daily_Digest_Widget');
         $uc_dailydigest_widget = new $uc_dailydigest_widget_class;
