@@ -15,12 +15,12 @@
     ?>
 
     <li>
-        <a href="<?php echo $news_post->url; ?>"><?php echo strip_tags($news_post->title); ?></a><br/>
+        <a href="<?php echo $news_post->url; ?>" target="_blank"><?php echo strip_tags($news_post->title); ?></a><br/>
         <?php
             $excerpt = strip_tags($news_post->content);
             $excerpt_length = strlen($excerpt);
             $last_word = ($excerpt_length > 200) ? strpos($excerpt, ' ', 150) : 0;
-            echo ($excerpt_length > 200) ? substr($excerpt, 0, $last_word) . '... <a href="' . $news_post->url . '">[Read More]</a>' : $excerpt;
+            echo ($excerpt_length > 200) ? substr($excerpt, 0, $last_word) . '... <a href="' . $news_post->url . '" target="_blank">[Read More]</a>' : $excerpt;
         ?>
 
     </li>
