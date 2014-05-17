@@ -153,17 +153,17 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $limited1 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "", 0);
         $limit1_length = sizeof($limited1);
 
-        $this->assertEqual( 0, $limit1_length );
+        $this->assertEquals( 0, $limit1_length );
 
         $limited2 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "", 1);
         $limit2_length = sizeof($limited2);
 
-        $this->assertEqual( 0, $limit2_length );
+        $this->assertEquals( 0, $limit2_length );
 
         $limited3 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "", -1);
         $limit3_length = sizeof($limited3);
 
-        $this->assertEqual( 1, $limit3_length );
+        $this->assertEquals( 1, $limit3_length );
 
     }
 
