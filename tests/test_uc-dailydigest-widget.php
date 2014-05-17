@@ -101,7 +101,6 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $posts = $uc_dailydigest_widget->get_feed_posts($this->test_feed);
         $daily_digest_xml = get_transient( $this->xml_transient_name );
-        $this->assertTrue( $daily_digest_xml );
         $this->assertInternalType( 'string', $daily_digest_xml );
         $this->assertGreaterThan( 0, strlen($daily_digest_xml) );
     }
@@ -122,7 +121,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $pre_filter_length = sizeof($this->simpleXML_test_feed);
 
-        $private_filter_simpleXML_posts->invokeArgs(new UConn_Daily_Digest_Widget, array( $this->simpleXML_test_feed, "UConn Today") );
+        $private_filter_simpleXML_posts->invokeArgs(new UConn_Daily_Digest_Widget, array( &$this->simpleXML_test_feed, "UConn Today") );
 
         $post_filter_length = sizeof($this->simpleXML_test_feed);
 
@@ -138,13 +137,13 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $filtered1 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "UConn Today");
         $one_filter_length = sizeof($filtered1);
 
-        $this->assertGreaterThan( $post_filter_length, $one_filter_length );
+        $this->assertGreaterThan( $one_filter_length, $pre_filter_length );
 
         $filtered2 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "UConn Today; Research, Funding, and Awards");
 
         $two_filter_length = sizeof($filtered2);
 
-        $this->assertGreaterThan( $one_filter_length, $two_filter_length );
+        $this->assertGreaterThan( $two_filter_length, $one_filter_length );
     }
 
     function test_get_feed_posts_limit() {
@@ -158,7 +157,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $limited2 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "", 1);
         $limit2_length = sizeof($limited2);
 
-        $this->assertEquals( 0, $limit2_length );
+        $this->assertEquals( 1, $limit2_length );
 
         $limited3 = $uc_dailydigest_widget->get_feed_posts($this->test_feed, "", -1);
         $limit3_length = sizeof($limited3);
@@ -175,7 +174,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertInternalType( 'string', $daily_digest_xml );
         $this->assertGreaterThan( 0, strlen($daily_digest_xml) );
 
-        $uc_dailydigest_widget->deactivate();
+        $uc_dailydigest_widget->deactivate(null);
         $daily_digest_xml = get_transient( $this->xml_transient_name );
         $this->assertFalse( $daily_digest_xml );
     }
