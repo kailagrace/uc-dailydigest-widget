@@ -151,7 +151,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
             $this->filter_simpleXML_posts( $daily_digest_news_posts, $exclude );
         }
 
-        return array_slice($daily_digest_news_posts, 0, $num_posts);
+        return array_slice($daily_digest_news_posts, 0, absint($num_posts));
 
     }
 
