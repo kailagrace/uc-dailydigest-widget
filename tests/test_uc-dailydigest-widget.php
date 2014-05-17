@@ -20,7 +20,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $uc_dailydigest_widget_class = apply_filters('uc_dailydigest_widget_class', 'UConn_Daily_Digest_Widget');
         $uc_dailydigest_widget = new $uc_dailydigest_widget_class;
-        }
+    }
 
     function test_tests() {
         $this->assertTrue( true );
@@ -117,9 +117,12 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     function test_filter_simpleXML_posts() {
         global $uc_dailydigest_widget;
 
+        $private_filter_simpleXML_posts = new ReflectionMethod('UConn_Daily_Digest_Widget', 'filter_simpleXML_posts');
+        $private_filter_simpleXML_posts->setAccessible(true);
+
         $pre_filter_length = sizeof($this->simpleXML_test_feed);
 
-        $uc_dailydigest_widget->filter_simpleXML_posts( $this->simpleXML_test_feed, "UConn Today" );
+        $private_filter_simpleXML_posts->invokeArgs(new UConn_Daily_Digest_Widget, array( $this->simpleXML_test_feed, "UConn Today") );
 
         $post_filter_length = sizeof($this->simpleXML_test_feed);
 
