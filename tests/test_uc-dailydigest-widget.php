@@ -170,6 +170,11 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     }
 
+    // TODO: test flush widget cache
+    // TODO: test form
+    // TODO: test widget
+    // TODO: test updating widget options
+
     function test_deactivate() {
         global $uc_dailydigest_widget;
 
