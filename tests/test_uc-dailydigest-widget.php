@@ -130,8 +130,6 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertGreaterThan($post_filter_length, $pre_filter_length);
     }
 
-    // TODO: test simpleXML_posts filtering
-
     function test_get_feed_posts_filter() {
         global $uc_dailydigest_widget;
 
@@ -170,7 +168,24 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     }
 
-    // TODO: test flush widget cache
+    function test_flush_widget_cache() {
+        global $uc_dailydigest_widget;
+
+        $uc_dailydigest_widget->flush_widget_cache();
+
+        $this->assertFalse(wp_cache_get($this->widget_slug, 'widget'));
+    }
+
+    function test_widget_admin_form() {
+        global $uc_dailydigest_widget;
+
+        $widget_form = $uc_dailydigest_widget->form( $uc_dailydigest_widget->get_widget_defaults());
+
+        $html = new DOMDocument();
+        $html->loadHTML($widget_form);
+        $this->assertEquals( 'select', ($html->getElementById( $uc_dailydigest_widget->get_field_id( 'feed_url' ))->tagName);
+    }
+
     // TODO: test form
     // TODO: test widget
     // TODO: test updating widget options
