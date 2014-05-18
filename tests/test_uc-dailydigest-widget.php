@@ -8,6 +8,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     private $test_feed;
     private $simpleXML_test_feed;
 
+    /**
+     * Sets up all of the test mock objects, and creates a global
+     * instance of the widget.
+     */
     function setUp() {
         global $uc_dailydigest_widget;
 
@@ -24,28 +28,44 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $uc_dailydigest_widget = new $uc_dailydigest_widget_class;
     }
 
+    /**
+     * Tests that the testing framework is working.
+     */
     function test_tests() {
         $this->assertTrue( true );
     }
 
+    /**
+     * Check if the plugin is active.
+     */
     function test_is_plugin_active() {
         $this->assertTrue( is_plugin_active( 'uc-dailydigest-widget/uconn-daily-digest-widget.php' ) );
     }
 
+    /**
+     * Test if init hook was added.
+     */
     function test_init_hook_was_added() {
         global $uc_dailydigest_widget;
+
         $this->assertGreaterThan( 0, has_filter(
             'init',
             array( $uc_dailydigest_widget, 'widget_textdomain')
         ) );
     }
 
+    /**
+     * Test if the the widget slug is correct.
+     */
     function test_get_widget_slug() {
         global $uc_dailydigest_widget;
 
         $this->assertEquals( $this->widget_slug, $uc_dailydigest_widget->get_widget_slug() );
     }
 
+    /**
+     * Test if widget stylesheet has been queued.
+     */
     function test_widget_styles_enqueued() {
         global $uc_dailydigest_widget;
 
@@ -55,6 +75,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         ) );
     }
 
+    /**
+     * Test if admin stylesheet has been queued.
+     */
     function test_admin_styles_enqueued() {
         global $uc_dailydigest_widget;
 
@@ -64,6 +87,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         ) );
     }
 
+    /**
+     * Test getting the feed urls for the widget to use.
+     */
     function test_get_feed_urls() {
         global $uc_dailydigest_widget;
 
@@ -73,6 +99,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertArrayHasKey( 'Faculty/Staff Daily Digest', $feed_urls );
     }
 
+    /**
+     * Test getting the widget's default settings.
+     */
     function test_get_widget_defaults() {
         global $uc_dailydigest_widget;
 
@@ -85,11 +114,18 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertArrayHasKey( 'exclude_categories', $this->defaults );
     }
 
+    /**
+     * Test that the widget's transient cache does not exist
+     * before the widget has run.
+     */
     function test_feed_transient_undefined() {
         $daily_digest_xml = get_transient( $this->xml_transient_name );
         $this->assertFalse( $daily_digest_xml );
     }
 
+    /**
+     * Test getting the widgets default feed posts.
+     */
     function test_get_feed_posts() {
         global $uc_dailydigest_widget;
 
@@ -98,6 +134,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertGreaterThan( 0, sizeof($posts) );
     }
 
+    /**
+     * Test that the widget's transient cache exists.
+     */
     function test_feed_transient_exists() {
         global $uc_dailydigest_widget;
 
@@ -107,6 +146,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertGreaterThan( 0, strlen($daily_digest_xml) );
     }
 
+    /**
+     * Test deletion of the widget's transient feed post cache.
+     */
     function test_feed_delete_transient() {
         global $uc_dailydigest_widget;
 
@@ -115,6 +157,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertFalse( $daily_digest_xml );
     }
 
+    /**
+     * Creates a reflection method to test the private method
+     * 'filter_simpleXML_posts'. Verifies that this is working.
+     */
     function test_filter_simpleXML_posts() {
         global $uc_dailydigest_widget;
 
@@ -130,6 +176,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertGreaterThan($post_filter_length, $pre_filter_length);
     }
 
+    /**
+     * Tests that the get_feed_posts function is working correctly.
+     * Verifies that the feed category filtering is working too.
+     */
     function test_get_feed_posts_filter() {
         global $uc_dailydigest_widget;
 
@@ -148,6 +198,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertGreaterThan( $two_filter_length, $one_filter_length );
     }
 
+    /**
+     * Test that the widget returns only how many posts the user
+     * specifies.
+     */
     function test_get_feed_posts_limit() {
         global $uc_dailydigest_widget;
 
@@ -168,6 +222,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     }
 
+    /**
+     * Tests that the widget cache is cleared
+     */
     function test_flush_widget_cache() {
         global $uc_dailydigest_widget;
 
@@ -176,6 +233,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertFalse(wp_cache_get($this->widget_slug, 'widget'));
     }
 
+    /**
+     * Tests that the admin form is displayed with the correct
+     * input fields.
+     */
     function test_widget_admin_form() {
         global $uc_dailydigest_widget;
 
@@ -191,6 +252,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertInstanceOf( 'DOMElement', $html->getElementById( $uc_dailydigest_widget->get_field_id( 'exclude_categories' ) ) );
     }
 
+    /**
+     * Test that the widget is outputting the parsed feed posts.
+     */
     function test_widget() {
         global $uc_dailydigest_widget;
 
@@ -208,6 +272,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     }
 
+    /**
+     * Test that the widget's options get updated when calling
+     * this function.
+     */
     function test_widget_update() {
         global $uc_dailydigest_widget;
 
@@ -225,6 +293,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $this->assertEquals( 'testing', $new_instance['exclude_categories']);
     }
 
+    /**
+     * Tests that the widget is deconstructed properly when
+     * deactivated.
+     */
     function test_deactivate() {
         global $uc_dailydigest_widget;
 
