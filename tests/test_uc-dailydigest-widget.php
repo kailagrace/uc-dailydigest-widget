@@ -186,9 +186,23 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $html = new DOMDocument();
         $html->loadHTML($widget_form);
         $this->assertInstanceOf( 'DOMElement', $html->getElementById( $uc_dailydigest_widget->get_field_id( 'feed_url' ) ) );
+        $this->assertInstanceOf( 'DOMElement', $html->getElementById( $uc_dailydigest_widget->get_field_id( 'num_posts' ) ) );
+        $this->assertInstanceOf( 'DOMElement', $html->getElementById( $uc_dailydigest_widget->get_field_id( 'exclude_categories' ) ) );
     }
 
-    // TODO: test widget
+    function test_widget() {
+        global $uc_dailydigest_widget;
+
+        ob_start();
+        $uc_dailydigest_widget->widget( array(),  $uc_dailydigest_widget->get_widget_defaults() );
+        $widget_form = ob_get_flush();
+
+        $html = new DOMDocument();
+        $html->loadHTML($widget_form);
+        $this->assertInstanceOf( 'DOMNodeList', $html->getElementsByTagName( 'li' ) );
+        
+    }
+
     // TODO: test updating widget options
 
     function test_deactivate() {
