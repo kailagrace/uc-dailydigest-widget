@@ -10,7 +10,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       UConn Daily Digest Widget
- * Plugin URI:        @TODO
+ * Plugin URI:        https://github.com/uconn/uc-dailydigest-widget
  * Description:       Displays the UConn Daily Digest feeds in a widget
  * Version:           1.0.0
  * Author:            Joseph Thibeault
@@ -36,7 +36,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
     protected $xml_transient_name = 'daily_digest_xml';
     protected $posts_xpath = '/rss/news';
-    protected $expire_hours = 1;
+    protected $expire_hours = 0.25;
 
     /*--------------------------------------------------*/
     /* Constructor
