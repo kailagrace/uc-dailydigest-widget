@@ -183,10 +183,9 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         $html = new DOMDocument();
         $html->loadHTML($widget_form);
-        $this->assertEquals( 'select', ($html->getElementById( $uc_dailydigest_widget->get_field_id( 'feed_url' ))->tagName);
+        $this->assertEquals( 'select', ($html->getElementById( $uc_dailydigest_widget->get_field_id( 'feed_url' )))->tagName);
     }
 
-    // TODO: test form
     // TODO: test widget
     // TODO: test updating widget options
 
