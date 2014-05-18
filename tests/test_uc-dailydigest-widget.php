@@ -208,7 +208,22 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
     }
 
-    // TODO: test updating widget options
+    function test_widget_update() {
+        global $uc_dailydigest_widget;
+
+        $new_instance = $uc_dailydigest_widget->update( array(
+            'feed_url' => 'testing',
+            'num_posts' => -1,
+            'exclude_categories' => 'testing'
+        ), $this->defaults);
+
+        $this->assertArrayHasKey( 'feed_url', $new_instance );
+        $this->assertEquals( 'testing', $new_instance['feed_url'] );
+        $this->assertArrayHasKey( 'num_posts', $new_instance );
+        $this->assertEquals( 1, $new_instance['num_posts'] );
+        $this->assertArrayHasKey( 'exclude_categories', $new_instance);
+        $this->assertEquals( 'testing', $new_instance['exclude_categories']);
+    }
 
     function test_deactivate() {
         global $uc_dailydigest_widget;
