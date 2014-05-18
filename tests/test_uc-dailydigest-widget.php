@@ -179,8 +179,10 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
     function test_widget_admin_form() {
         global $uc_dailydigest_widget;
 
-        $widget_form = $uc_dailydigest_widget->form( $uc_dailydigest_widget->get_widget_defaults());
-
+        ob_start();
+        $uc_dailydigest_widget->form( $uc_dailydigest_widget->get_widget_defaults() );
+        $widget_form = ob_get_flush();
+        
         $html = new DOMDocument();
         $html->loadHTML($widget_form);
         $this->assertTrue( $html->getElementById( $uc_dailydigest_widget->get_field_id( 'feed_url' ) ) );
