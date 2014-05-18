@@ -37,6 +37,10 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
     protected $xml_transient_name = 'daily_digest_xml';
     protected $posts_xpath = '/rss/news';
     protected $expire_hours = 0.25;
+    protected $feed_urls = array(
+        "Student Daily Digest" => "http://dailydigest.uconn.edu/stoday.xml",
+        "Faculty/Staff Daily Digest" => "http://dailydigest.uconn.edu/ftoday.xml"
+    );
 
     /*--------------------------------------------------*/
     /* Constructor
@@ -119,12 +123,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      * @return    array of daily digest feed urls.
      */
     public function get_feed_urls() {
-        $feed_urls = array(
-            "Student Daily Digest" => "http://dailydigest.uconn.edu/stoday.xml",
-            "Faculty/Staff Daily Digest" => "http://dailydigest.uconn.edu/ftoday.xml"
-        );
-
-        return $feed_urls;
+        return $this->feed_urls;
     }
 
     /**
