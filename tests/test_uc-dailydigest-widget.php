@@ -268,6 +268,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         ob_end_clean();
 
         $html = new DOMDocument();
+        libxml_use_internal_errors(true);
         $html->loadHTML($widget_form);
         $this->assertInstanceOf( 'DOMElement', $html->getElementById( $uc_dailydigest_widget->get_field_id( 'feed_url' ) ) );
         $this->assertInstanceOf( 'DOMElement', $html->getElementById( $uc_dailydigest_widget->get_field_id( 'num_posts' ) ) );
@@ -291,6 +292,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         echo $widget_form;
 
         $html = new DOMDocument();
+        libxml_use_internal_errors(true);
         $html->loadHTML($widget_form);
         $this->assertInstanceOf( 'DOMNodeList', $html->getElementsByTagName( 'li' ) );
 
