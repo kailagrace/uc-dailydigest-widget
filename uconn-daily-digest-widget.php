@@ -138,8 +138,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
         $daily_digest_xml = get_transient( $this->xml_transient_name );
 
         if ( false === $daily_digest_xml ) {
-            $context  = stream_context_create(array('http' => array('header' => 'Accept: application/xml')));
-            $daily_digest_xml = file_get_contents( $feed_url, false, $context);
+            $daily_digest_xml = $this->curl_get_contents( $feed_url );
             set_transient( $this->xml_transient_name, $daily_digest_xml, $this->expire_hours * HOUR_IN_SECONDS );
         }
 
@@ -152,6 +151,35 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
         return array_slice($daily_digest_news_posts, 0, absint($num_posts));
 
+    }
+
+    /**
+     * Retrieves the contents from a URL
+     *
+     * @since    1.0.0
+     * @requires PHP 5.3
+     *
+     * @return    String
+     */
+    private function curl_get_contents($url) {
+        
+         $curl = curl_init();
+
+         $userAgent = 'UCDailyDigest/1.0.1 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
+
+         curl_setopt($curl,CURLOPT_URL,$url);
+         curl_setopt($curl,CURLOPT_RETURNTRANSFER,TRUE);
+         curl_setopt($curl,CURLOPT_CONNECTTIMEOUT,5);
+         curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
+         curl_setopt($curl, CURLOPT_FAILONERROR, TRUE);
+         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);
+         curl_setopt($curl, CURLOPT_AUTOREFERER, TRUE);
+         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+
+         $contents = curl_exec($curl);
+         curl_close($curl);
+
+         return $contents;
     }
 
     /**
