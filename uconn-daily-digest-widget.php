@@ -162,14 +162,14 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      * @return    String
      */
     private function curl_get_contents($url) {
-        
+
          $curl = curl_init();
 
          $userAgent = 'UCDailyDigest/1.0.1 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
 
-         curl_setopt($curl,CURLOPT_URL,$url);
-         curl_setopt($curl,CURLOPT_RETURNTRANSFER,TRUE);
-         curl_setopt($curl,CURLOPT_CONNECTTIMEOUT,5);
+         curl_setopt($curl, CURLOPT_URL, $url);
+         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
          curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
          curl_setopt($curl, CURLOPT_FAILONERROR, TRUE);
          curl_setopt($curl, CURLOPT_FOLLOWLOCATION, TRUE);

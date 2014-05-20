@@ -19,7 +19,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
 
         include_once( plugin_dir_path( dirname( __FILE__ ) ) . '/uconn-daily-digest-widget.php' );
 
-        $this->test_feed = plugin_dir_path( dirname( __FILE__ ) ) . 'tests/test_feed.xml';
+        $this->test_feed = "https://raw.githubusercontent.com/uconn/uc-dailydigest-widget/master/tests/test_feed.xml";
         $this->test_xml = file_get_contents( $this->test_feed );
         $daily_digest_feed = simplexml_load_string($this->test_xml);
         $this->simpleXML_test_feed = $daily_digest_feed->xpath($this->posts_xpath);
