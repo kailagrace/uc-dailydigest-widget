@@ -32,6 +32,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
      * @var      string
      */
 
+    protected $version = "1.0.0";
     protected $widget_slug = 'uconn-daily-digest-widget';
 
     protected $xml_transient_name = 'daily_digest_xml';
@@ -165,7 +166,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
 
          $curl = curl_init();
 
-         $userAgent = 'UCDailyDigest/1.0.1 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
+         $userAgent = 'UCDailyDigest/{$this->version} (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
 
          curl_setopt($curl, CURLOPT_URL, $url);
          curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
