@@ -35,6 +35,7 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
          $userAgent = 'UCDailyDigest/1.0.0 (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
 
          curl_setopt($curl, CURLOPT_URL, $url);
+         curl_setopt($curl, CURLOPT_HTTPHEADER, Array("Content-Type: text/xml"));
          curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
          curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
          curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);

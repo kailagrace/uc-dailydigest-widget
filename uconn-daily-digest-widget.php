@@ -169,6 +169,7 @@ class UConn_Daily_Digest_Widget extends WP_Widget {
          $userAgent = 'UCDailyDigest/{$this->version} (compatible; MSIE 6.0; Windows NT 5.1; .NET CLR 1.1.4322)';
 
          curl_setopt($curl, CURLOPT_URL, $url);
+         curl_setopt($curl, CURLOPT_HTTPHEADER, Array("Content-Type: text/xml"));
          curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
          curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
          curl_setopt($curl, CURLOPT_USERAGENT, $userAgent);
