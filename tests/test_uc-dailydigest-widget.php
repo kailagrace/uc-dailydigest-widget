@@ -289,8 +289,6 @@ class WP_Test_UC_DailyDigest_Widget extends WP_UnitTestCase {
         $widget_form = ob_get_contents();
         ob_end_clean();
 
-        echo $widget_form;
-
         $html = new DOMDocument();
         libxml_use_internal_errors(true);
         $html->loadHTML($widget_form);
