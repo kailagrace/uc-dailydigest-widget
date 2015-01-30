@@ -5,7 +5,6 @@
 
 .uconn-daily-digest-widget-class li.ucdd-category-title {
     font-size: 0.73rem;
-    line-height: 1rem;
     text-transform: uppercase;
     margin-top: 0.85rem;
     color: #999;
@@ -16,6 +15,5 @@
 }
 
 .uconn-daily-digest-widget-class li {
-    line-height: 1rem;
     margin-bottom: 0.4rem;
 }
